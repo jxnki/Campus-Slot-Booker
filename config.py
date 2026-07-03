@@ -9,8 +9,6 @@ class Config:
     SECRET_KEY = os.getenv("SECRET_KEY")
 
     SQLALCHEMY_DATABASE_URI = os.getenv(
-        "DATABASE_URL",
-        "sqlite:///campus_slot_booker.db"
-    )
+        "DATABASE_URL")
 
     SQLALCHEMY_TRACK_MODIFICATIONS = False
