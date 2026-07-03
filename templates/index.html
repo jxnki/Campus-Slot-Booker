@@ -1,20 +1,76 @@
 {% extends "base.html" %}
 
 {% block title %}
-Home
+Campus Slot Booker
 {% endblock %}
 
 {% block content %}
 
 <section class="hero">
-    <h2>Welcome to Campus Slot Booker</h2>
+
+    <h1>Welcome to Campus Slot Booker</h1>
 
     <p>
-        Book seminar halls and laboratories easily.
-        Faculty and administrators can review and manage booking requests.
+        Book seminar halls and laboratories across campus quickly and easily.
+        Students can request slots, while administrators review and manage bookings efficiently.
     </p>
 
-    <a href="#" class="button">Get Started</a>
+    <div class="hero-buttons">
+
+        <a href="/register" class="btn">
+            Register
+        </a>
+
+        <a href="/login" class="btn btn-outline">
+            Login
+        </a>
+
+    </div>
+
+</section>
+
+<section class="features">
+
+    <div class="feature-card">
+
+        <h3>📅 Easy Booking</h3>
+
+        <p>
+            Request seminar halls and laboratories in just a few clicks.
+        </p>
+
+    </div>
+
+    <div class="feature-card">
+
+        <h3>⏰ Real-Time Availability</h3>
+
+        <p>
+            Prevent duplicate bookings with automatic conflict detection.
+        </p>
+
+    </div>
+
+    <div class="feature-card">
+
+        <h3>✅ Approval Workflow</h3>
+
+        <p>
+            Booking requests are reviewed and approved by administrators.
+        </p>
+
+    </div>
+
+    <div class="feature-card">
+
+        <h3>🔒 Secure Login</h3>
+
+        <p>
+            Passwords are securely stored using hashing and role-based access.
+        </p>
+
+    </div>
+
 </section>
 
 {% endblock %}
