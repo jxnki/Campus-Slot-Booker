@@ -1,5 +1,7 @@
 venv/
-__pycache__/
+_pycache_/
 *.pyc
 .env
-campus_slot_booker.db
+.vscode/
+instance/
+*.db
