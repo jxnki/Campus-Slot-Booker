@@ -83,7 +83,7 @@ def login():
             return redirect("/student-dashboard")
 
         flash(
-            "Invalid login for the selected role.",
+            "Invalid login details.",
             "error"
         )
 
