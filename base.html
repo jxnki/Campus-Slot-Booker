@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Campus Slot Booker{% endblock %}</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/style.css') }}"
+    >
+</head>
+<body>
+
+    <header>
+
+    <div class="container header-container">
+
+        <div class="header-left">
+
+            {% block back_button %}
+            {% endblock %}
+
+            <h1>Campus Slot Booker</h1>
+
+        </div>
+
+        <nav>
+
+            {% if "user_id" in session %}
+
+                {% if session["role"] == "Student" %}
+
+                    <a href="/student-dashboard">Dashboard</a>
+                    <a href="/my-bookings">My Bookings</a>
+                    <a href="/logout">Logout</a>
+
+                {% elif session["role"] == "Admin" %}
+
+                    <a href="/admin-dashboard">Dashboard</a>
+                    <a href="/manage-resources">Manage Resources</a>
+                    <a href="/logout">Logout</a>
+
+                {% endif %}
+
+            {% else %}
+
+                <a href="/">Home</a>
+                <a href="/login">Login</a>
+                <a href="/register">Register</a>
+
+            {% endif %}
+
+        </nav>
+
+    </div>
+
+</header>
+    <main class="container">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+
+            {% if messages %}
+
+                {% for category, message in messages %}
+
+                    <div class="flash {{ category }}">
+                        {{ message }}
+                    </div>
+
+                {% endfor %}
+
+            {% endif %}
+
+        {% endwith %}
+        {% block content %}
+        {% endblock %}
+    </main>
+
+</body>
+</html>

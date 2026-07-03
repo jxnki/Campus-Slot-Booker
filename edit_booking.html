@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+
+{% block title %}
+Edit Booking
+{% endblock %}
+
+{% block content %}
+
+<h2 class="page-title">Edit Booking</h2>
+
+{% if error %}
+<p class="error">{{ error }}</p>
+{% endif %}
+
+<div class="form-card">
+
+<form method="POST">
+
+<label>Resource</label>
+
+<input
+    type="text"
+    value="{{ booking.resource.name }}"
+    readonly
+>
+
+<label>Date</label>
+
+<input
+    type="date"
+    name="booking_date"
+    value="{{ booking.booking_date }}"
+    required
+>
+
+<label>Start Time</label>
+
+<input
+    type="time"
+    name="start_time"
+    value="{{ booking.start_time.strftime('%H:%M') }}"
+    required
+>
+
+<label>End Time</label>
+
+<input
+    type="time"
+    name="end_time"
+    value="{{ booking.end_time.strftime('%H:%M') }}"
+    required
+>
+<label>Reason</label>
+
+<textarea
+    name="reason"
+    rows="4"
+    required
+>{{ booking.reason }}</textarea>
+<button class="button">
+    Save Changes
+</button>
+
+</form>
+
+</div>
+
+{% endblock %}

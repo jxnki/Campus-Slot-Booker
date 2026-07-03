@@ -1,0 +1,115 @@
+{% extends "base.html" %}
+
+{% block title %}
+My Bookings
+{% endblock %}
+
+{% block back_button %}
+<button class="back-btn" onclick="history.back()">
+    ← Back
+</button>
+{% endblock %}
+
+{% block content %}
+
+<h2 class="page-title">My Bookings</h2>
+
+{% if bookings %}
+
+<table class="booking-table">
+
+    <tr>
+        <th>Resource</th>
+        <th>Date</th>
+        <th>Start</th>
+        <th>End</th>
+        <th>Reason</th>
+        <th>Status</th>
+        <th>Action</th>
+    </tr>
+
+    {% for booking in bookings %}
+
+    <tr>
+
+        <td>{{ booking.resource.name }}</td>
+
+        <td>{{ booking.booking_date.strftime("%d/%m/%Y") }}</td>
+
+        <td>{{ booking.start_time.strftime("%I:%M %p") }}</td>
+
+        <td>{{ booking.end_time.strftime("%I:%M %p") }}</td>
+
+        <td>{{ booking.reason }}</td>
+        
+        <td>
+
+            {% if booking.status == "Approved" %}
+
+                <span class="status approved">
+                    Approved
+                </span>
+
+            {% elif booking.status == "Rejected" %}
+
+                <span class="status rejected">
+                    Rejected
+                </span>
+
+            {% elif booking.status == "Cancelled" %}
+
+                <span class="status cancelled">
+                    Cancelled
+                </span>
+
+            {% else %}
+
+                <span class="status pending">
+                    Pending
+                </span>
+
+            {% endif %}
+
+        </td>
+        <td>
+
+            {% if booking.status == "Pending" %}
+
+                <a
+                    href="/edit-booking/{{ booking.id }}"
+                    class="button"
+                >
+                    Edit
+                </a>
+
+                <a
+                    href="/cancel-booking/{{ booking.id }}"
+                    class="button reject-btn"
+                    onclick="return confirm('Do you want to cancel this booking?')"
+                >
+                    Cancel
+                </a>
+
+            {% else %}
+
+                —
+
+            {% endif %}
+
+        </td>
+    </tr>
+    
+
+    {% endfor %}
+
+</table>
+
+{% else %}
+
+<p style="text-align:center;">
+    You haven't made any bookings yet.
+</p>
+
+{% endif %}
+
+{% endblock %}

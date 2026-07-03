@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block title %}
+Student Dashboard
+{% endblock %}
+
+{% block content %}
+
+<h2 class="page-title">
+    Welcome, {{ student_name }}
+</h2>
+
+<p class="page-subtitle">
+    Available Resources
+</p>
+
+<div class="resource-grid">
+
+    {% for resource in resources %}
+
+    <div class="resource-card">
+
+        <h3>{{ resource.name }}</h3>
+
+        <a href="/book/{{ resource.id }}" class="button">
+            Book Slot
+        </a>
+
+    </div>
+
+    {% endfor %}
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+
+{% block title %}
+Manage Resources
+{% endblock %}
+
+{% block content %}
+
+<h2 class="page-title">
+    Manage Resources
+</h2>
+
+<p>
+    <a href="/add-resource" class="button">
+        + Add Resource
+    </a>
+</p>
+
+<table class="booking-table">
+
+    <tr>
+
+        <th>Name</th>
+
+        <th>Status</th>
+
+        <th>Action</th>
+
+    </tr>
+
+    {% for resource in resources %}
+
+    <tr>
+
+        <td>{{ resource.name }}</td>
+
+        <td>
+
+            {% if resource.is_active %}
+
+                <span class="status approved">
+                    Active
+                </span>
+
+            {% else %}
+
+                <span class="status rejected">
+                    Inactive
+                </span>
+
+            {% endif %}
+
+        </td>
+
+        <td>
+
+            {% if resource.is_active %}
+
+                <form
+                    action="/deactivate-resource/{{ resource.id }}"
+                    method="POST"
+                    style="display:inline;"
+                >
+                    <button
+                        type="submit"
+                        class="button reject-btn"
+                        onclick="return confirm('Deactivate this resource?')"
+                    >
+                        Deactivate
+                    </button>
+                </form>
+
+            {% else %}
+
+                <form
+                    action="/activate-resource/{{ resource.id }}"
+                    method="POST"
+                    style="display:inline;"
+                >
+                    <button
+                        type="submit"
+                        class="button approve-btn"
+                        onclick="return confirm('Activate this resource?')"
+                    >
+                        Activate
+                    </button>
+                </form>
+
+            {% endif %}
+
+        </td>
+
+    </tr>
+
+    {% endfor %}
+
+</table>
+
+{% endblock %}

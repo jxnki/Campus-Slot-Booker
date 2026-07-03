@@ -1,0 +1,110 @@
+{% extends "base.html" %}
+
+{% block title %}
+Admin Dashboard
+{% endblock %}
+
+{% block content %}
+
+<h2 class="page-title">
+    Admin Dashboard
+</h2>
+
+<table class="booking-table">
+
+<tr>
+
+    <th>Student</th>
+    <th>Resource</th>
+    <th>Date</th>
+    <th>Start</th>
+    <th>End</th>
+    <th>Reason</th>
+    <th>Status</th>
+    <th>Action</th>
+
+</tr>
+
+{% for booking in bookings %}
+
+<tr>
+
+    <td>{{ booking.user.name }}</td>
+
+    <td>{{ booking.resource.name }}</td>
+
+    <td>{{ booking.booking_date.strftime("%d/%m/%Y") }}</td>
+
+    <td>{{ booking.start_time.strftime("%I:%M %p") }}</td>
+
+    <td>{{ booking.end_time.strftime("%I:%M %p") }}</td>
+
+    <td>{{ booking.reason }}</td>
+
+    <td>
+
+        {% if booking.status == "Approved" %}
+
+            <span class="status approved">
+                Approved
+            </span>
+
+        {% elif booking.status == "Rejected" %}
+
+            <span class="status rejected">
+                Rejected
+            </span>
+
+        {% else %}
+
+            <span class="status pending">
+                Pending
+            </span>
+
+        {% endif %}
+
+    </td>
+
+    <td>
+
+        {% if booking.status == "Pending" %}
+
+            <form
+                action="/approve/{{ booking.id }}"
+                method="POST"
+                style="display:inline;"
+            >
+                <button
+                    type="submit"
+                    class="button approve-btn"
+                    onclick="return confirm('Approve this booking?')"
+                >
+                    Approve
+                </button>
+            </form>
+
+            <form
+                action="/reject/{{ booking.id }}"
+                method="POST"
+                style="display:inline;"
+            >
+                <button
+                    type="submit"
+                    class="button reject-btn"
+                    onclick="return confirm('Reject this booking?')"
+                >
+                    Reject
+                </button>
+            </form>
+
+        {% endif %}
+
+    </td>
+
+</tr>
+
+{% endfor %}
+
+</table>
+
+{% endblock %}

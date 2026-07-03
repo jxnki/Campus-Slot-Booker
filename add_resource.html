@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block title %}
+Add Resource
+{% endblock %}
+
+{% block content %}
+
+<h2 class="page-title">Add Resource</h2>
+
+{% if error %}
+<p class="error">{{ error }}</p>
+{% endif %}
+
+<div class="form-card">
+
+<form method="POST">
+
+    <label>Resource Name</label>
+
+    <input
+        type="text"
+        name="name"
+        required
+    >
+
+    <button class="button">
+        Add Resource
+    </button>
+
+</form>
+
+</div>
+
+{% endblock %}
