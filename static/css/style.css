@@ -305,6 +305,48 @@ nav a:hover{
     border-bottom:1px solid #eee;
 }
 
+.booking-actions{
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    gap:10px;
+
+    flex-wrap:wrap;
+}
+
+.booking-action-btn{
+
+    min-width:88px;
+
+    padding:9px 14px;
+
+    border-radius:10px;
+
+    font-size:14px;
+
+    line-height:1;
+
+    display:inline-flex;
+
+    align-items:center;
+
+    justify-content:center;
+}
+
+.booking-edit-btn{
+
+    background:#574964;
+}
+
+.booking-edit-btn:hover{
+
+    background:#463853;
+}
+
 .booking-table tr:hover{
 
     background:#fff7ea;
