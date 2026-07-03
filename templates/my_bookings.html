@@ -20,6 +20,7 @@ My Bookings
 
     <tr>
         <th>Resource</th>
+        <th>Booking ID</th>
         <th>Date</th>
         <th>Start</th>
         <th>End</th>
@@ -33,7 +34,7 @@ My Bookings
     <tr>
 
         <td>{{ booking.resource.name }}</td>
-
+        <td>{{ booking.id }}</td>
         <td>{{ booking.booking_date.strftime("%d/%m/%Y") }}</td>
 
         <td>{{ booking.start_time.strftime("%I:%M %p") }}</td>
@@ -41,7 +42,7 @@ My Bookings
         <td>{{ booking.end_time.strftime("%I:%M %p") }}</td>
 
         <td>{{ booking.reason }}</td>
-        
+
         <td>
 
             {% if booking.status == "Approved" %}
@@ -75,20 +76,22 @@ My Bookings
 
             {% if booking.status == "Pending" %}
 
-                <a
-                    href="/edit-booking/{{ booking.id }}"
-                    class="button"
-                >
-                    Edit
-                </a>
+                <div class="booking-actions">
+                    <a
+                        href="/edit-booking/{{ booking.id }}"
+                        class="button booking-action-btn booking-edit-btn"
+                    >
+                        Edit
+                    </a>
 
-                <a
-                    href="/cancel-booking/{{ booking.id }}"
-                    class="button reject-btn"
-                    onclick="return confirm('Do you want to cancel this booking?')"
-                >
-                    Cancel
-                </a>
+                    <a
+                        href="/cancel-booking/{{ booking.id }}"
+                        class="button reject-btn booking-action-btn"
+                        onclick="return confirm('Are you sure you want to cancel this booking?')"
+                    >
+                        Cancel
+                    </a>
+                </div>
 
             {% else %}
 
