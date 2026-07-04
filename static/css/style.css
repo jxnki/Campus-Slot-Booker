@@ -221,6 +221,43 @@ nav a:hover{
     color: #666;
 }
 
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 18px;
+    margin: 0 0 30px;
+}
+
+.admin-dashboard-layout {
+    width: min(96vw, 1600px);
+    margin: 0 auto;
+}
+
+.stat-card {
+    background: linear-gradient(135deg, #ffffff 0%, #fff7ea 100%);
+    border: 1px solid rgba(87, 73, 100, 0.08);
+    border-radius: 16px;
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.06);
+}
+
+.stat-value {
+    display: block;
+    font-size: 2rem;
+    font-weight: 800;
+    color: #574964;
+    line-height: 1;
+    margin-bottom: 8px;
+}
+
+.stat-label {
+    display: block;
+    font-size: 0.95rem;
+    color: #6b5b66;
+    font-weight: 600;
+}
+
 .resource-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
@@ -271,6 +308,7 @@ nav a:hover{
 .booking-table{
 
     width:100%;
+    table-layout:auto;
 
     border-collapse:collapse;
 
@@ -305,6 +343,12 @@ nav a:hover{
     border-bottom:1px solid #eee;
 }
 
+.booking-action-cell {
+    width: 220px;
+    min-width: 220px;
+    white-space: nowrap;
+}
+
 .booking-actions{
 
     display:flex;
@@ -315,14 +359,15 @@ nav a:hover{
 
     gap:10px;
 
-    flex-wrap:wrap;
+    flex-wrap:nowrap;
+    white-space:nowrap;
 }
 
 .booking-action-btn{
 
     min-width:88px;
 
-    padding:9px 14px;
+    padding:8px 12px;
 
     border-radius:10px;
 
@@ -394,6 +439,179 @@ input:focus{
     font-size:14px;
 
     font-weight:bold;
+}
+
+.status.cancelled{
+    background:#7b7b7b;
+}
+
+.notification-panel-wrap {
+    margin-top: 18px;
+}
+
+.notification-panel {
+    display: none;
+    background: white;
+    border-radius: 18px;
+    padding: 20px;
+    box-shadow: 0 8px 18px rgba(0,0,0,0.08);
+    margin-bottom: 22px;
+}
+
+.notification-panel.is-open {
+    display: block;
+}
+
+.notification-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    border: none;
+    background: rgba(255,255,255,0.14);
+    color: #fff;
+    padding: 10px 14px;
+    border-radius: 999px;
+    cursor: pointer;
+    font-weight: 700;
+    transition: 0.2s ease;
+}
+
+.notification-btn:hover {
+    background: rgba(255,255,255,0.22);
+}
+
+.notification-bell {
+    font-size: 1rem;
+}
+
+.notification-count {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 22px;
+    height: 22px;
+    border-radius: 999px;
+    background: #dc4f4f;
+    color: white;
+    font-size: 0.8rem;
+    padding: 0 6px;
+}
+
+.panel-header {
+    margin-bottom: 18px;
+}
+
+.panel-header h3 {
+    color: #574964;
+    margin-bottom: 4px;
+    font-size: 1.2rem;
+}
+
+.panel-header p {
+    color: #6b5b66;
+}
+
+.activity-list {
+    display: grid;
+    gap: 12px;
+}
+
+.activity-item {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    align-items: center;
+    padding: 14px 16px;
+    border: 1px solid #f0e5d8;
+    border-radius: 14px;
+    background: #fffdf9;
+}
+
+.activity-item strong {
+    color: #574964;
+}
+
+.activity-item p {
+    color: #6b5b66;
+    font-size: 0.95rem;
+    margin-top: 4px;
+}
+
+.empty-state {
+    text-align: center;
+    padding: 28px 18px;
+    border: 1px dashed #d6c6b7;
+    border-radius: 14px;
+    background: #fffdf9;
+    color: #6b5b66;
+}
+
+.empty-state .button {
+    margin-top: 14px;
+}
+
+.booking-form-card {
+    width: 100%;
+    max-width: 620px;
+    padding: 30px;
+}
+
+.booking-form {
+    display: grid;
+    gap: 18px;
+}
+
+.form-row {
+    display: grid;
+    gap: 18px;
+}
+
+.form-row.two-cols {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.form-group {
+    margin-bottom: 0;
+}
+
+.form-group-wide {
+    grid-column: 1 / -1;
+}
+
+.field-help {
+    display: block;
+    margin-top: -8px;
+    color: #7b6a75;
+    font-size: 0.86rem;
+}
+
+.booking-form input,
+.booking-form textarea {
+    margin-bottom: 8px;
+}
+
+.booking-submit-btn {
+    width: 100%;
+    padding: 14px 20px;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-weight: 700;
+}
+
+@media (max-width: 980px) {
+    .admin-dashboard-layout {
+        width: 100%;
+    }
+}
+
+@media (max-width: 720px) {
+    .form-row.two-cols {
+        grid-template-columns: 1fr;
+    }
+
+    .notification-btn {
+        padding: 9px 12px;
+    }
 }
 
 .approved{
