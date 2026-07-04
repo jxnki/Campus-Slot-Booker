@@ -10,7 +10,31 @@ Admin Dashboard
     Admin Dashboard
 </h2>
 
-<table class="booking-table">
+<div class="stats-grid">
+
+    <div class="stat-card">
+        <span class="stat-value">{{ total_booking_count }}</span>
+        <span class="stat-label">Total Bookings</span>
+    </div>
+
+    <div class="stat-card">
+        <span class="stat-value">{{ pending_booking_count }}</span>
+        <span class="stat-label">Pending</span>
+    </div>
+
+    <div class="stat-card">
+        <span class="stat-value">{{ approved_booking_count }}</span>
+        <span class="stat-label">Approved</span>
+    </div>
+
+    <div class="stat-card">
+        <span class="stat-value">{{ active_resource_count }}</span>
+        <span class="stat-label">Active Resources</span>
+    </div>
+
+</div>
+
+<table class="booking-table" id="booking-table">
 
 <tr>
 
@@ -72,7 +96,7 @@ Admin Dashboard
 
     </td>
 
-    <td>
+    <td class="booking-action-cell">
 
         {% if booking.status == "Pending" %}
 
