@@ -109,9 +109,10 @@ My Bookings
 
 {% else %}
 
-<p style="text-align:center;">
-    You haven't made any bookings yet.
-</p>
+<div class="empty-state">
+    <p>You haven’t made any bookings yet.</p>
+    <a href="/student-dashboard" class="button">Browse Resources</a>
+</div>
 
 {% endif %}
 
