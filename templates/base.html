@@ -39,6 +39,19 @@
 
                     <a href="/admin-dashboard">Dashboard</a>
                     <a href="/manage-resources">Manage Resources</a>
+                    <button
+                        type="button"
+                        class="notification-btn"
+                        data-toggle-notifications
+                        data-mark-notifications-read
+                        aria-controls="admin-notification-panel"
+                        aria-expanded="false"
+                    >
+                        <span class="notification-bell">🔔</span>
+                        {% if admin_notification_count %}
+                            <span class="notification-count" data-notification-count>{{ admin_notification_count }}</span>
+                        {% endif %}
+                    </button>
                     <a href="/logout">Logout</a>
 
                 {% endif %}
@@ -56,6 +69,37 @@
     </div>
 
 </header>
+
+    {% if session.get("role") == "Admin" and admin_recent_activity is defined %}
+        <div class="container notification-panel-wrap">
+            <section id="admin-notification-panel" class="notification-panel" aria-hidden="true">
+                <div class="panel-header panel-header-tight">
+                    <h3>Recent Activity</h3>
+                    <p>Latest updates at a glance</p>
+                </div>
+
+                {% if admin_recent_activity %}
+                    <div class="activity-list activity-list-compact notification-activity-list">
+                        {% for item in admin_recent_activity %}
+                            <div class="activity-item activity-item-compact notification-activity-item">
+                                <div>
+                                    <strong>{{ item.title }}</strong>
+                                    <p>{{ item.meta }}</p>
+                                </div>
+
+                                <span class="status {{ item.status|lower }}">{{ item.status }}</span>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="empty-state empty-state-compact">
+                        <p>No booking activity yet.</p>
+                    </div>
+                {% endif %}
+            </section>
+        </div>
+    {% endif %}
+
     <main class="container">
         {% with messages = get_flashed_messages(with_categories=true) %}
 
@@ -75,6 +119,42 @@
         {% block content %}
         {% endblock %}
     </main>
+
+    <script>
+        (function () {
+            const toggleButton = document.querySelector("[data-toggle-notifications]");
+            const markReadUrl = "/admin-notifications/mark-read";
+            const panel = document.getElementById("admin-notification-panel");
+            const notificationCount = document.querySelector("[data-notification-count]");
+
+            if (!toggleButton || !panel) {
+                return;
+            }
+
+            toggleButton.addEventListener("click", function () {
+                const isOpen = panel.classList.toggle("is-open");
+                toggleButton.setAttribute("aria-expanded", String(isOpen));
+                panel.setAttribute("aria-hidden", String(!isOpen));
+
+                if (isOpen && notificationCount) {
+                    fetch(markReadUrl, {
+                        method: "POST",
+                        headers: {
+                            "X-Requested-With": "XMLHttpRequest"
+                        }
+                    }).then(function (response) {
+                        if (!response.ok) {
+                            return;
+                        }
+
+                        notificationCount.remove();
+                    }).catch(function () {
+                        return;
+                    });
+                }
+            });
+        }());
+    </script>
 
 </body>
 </html>
