@@ -12,9 +12,11 @@ Edit Booking
 <p class="error">{{ error }}</p>
 {% endif %}
 
-<div class="form-card">
+<div class="form-card booking-form-card">
 
-<form method="POST">
+<form method="POST" class="booking-form">
+
+<div class="form-group form-group-wide">
 
 <label>Resource</label>
 
@@ -23,6 +25,11 @@ Edit Booking
     value="{{ booking.resource.name }}"
     readonly
 >
+<small class="field-help">This booking is tied to the selected resource.</small>
+
+</div>
+
+<div class="form-group form-group-wide">
 
 <label>Date</label>
 
@@ -32,6 +39,13 @@ Edit Booking
     value="{{ booking.booking_date }}"
     required
 >
+<small class="field-help">Choose a future date for the updated booking.</small>
+
+</div>
+
+<div class="form-row two-cols">
+
+<div class="form-group">
 
 <label>Start Time</label>
 
@@ -41,6 +55,11 @@ Edit Booking
     value="{{ booking.start_time.strftime('%H:%M') }}"
     required
 >
+<small class="field-help">Start time for the slot.</small>
+
+</div>
+
+<div class="form-group">
 
 <label>End Time</label>
 
@@ -50,14 +69,27 @@ Edit Booking
     value="{{ booking.end_time.strftime('%H:%M') }}"
     required
 >
+<small class="field-help">End time must be later.</small>
+
+</div>
+
+</div>
+
+<div class="form-group form-group-wide">
+
 <label>Reason</label>
 
 <textarea
     name="reason"
     rows="4"
     required
+    placeholder="Short reason for the update"
 >{{ booking.reason }}</textarea>
-<button class="button">
+<small class="field-help">Keep the reason short and clear.</small>
+
+</div>
+
+<button class="button booking-submit-btn">
     Save Changes
 </button>
 
