@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, session, flash
+from flask import Flask, render_template, request, redirect, session, flash, jsonify
 from config import Config
 from database import db
 from models import User,Resource, Booking
@@ -11,6 +11,52 @@ from werkzeug.security import (
 app = Flask(__name__)
 app.config.from_object(Config)
 db.init_app(app)
+
+
+@app.context_processor
+def inject_admin_recent_activity():
+    if session.get("role") != "Admin":
+        return {
+            "admin_recent_activity": [],
+            "admin_notification_count": 0
+        }
+
+    recent_activity = Booking.query.filter_by(
+        status="Pending"
+    ).order_by(Booking.id.desc()).limit(3).all()
+    activity_feed = []
+    last_seen_notification_id = session.get("admin_notifications_seen_id", 0)
+
+    for booking in recent_activity:
+        activity_feed.append({
+            "title": f"{booking.user.name} booked {booking.resource.name}",
+            "meta": f"Booking #{booking.id} · {booking.booking_date.strftime('%d/%m/%Y')} · {booking.start_time.strftime('%I:%M %p')} - {booking.end_time.strftime('%I:%M %p')}",
+            "status": booking.status
+        })
+
+    unread_count = Booking.query.filter(
+        Booking.status == "Pending",
+        Booking.id > last_seen_notification_id
+    ).count()
+
+    return {
+        "admin_recent_activity": activity_feed,
+        "admin_notification_count": unread_count
+    }
+
+
+@app.route("/admin-notifications/mark-read", methods=["POST"])
+def mark_admin_notifications_read():
+    if "user_id" not in session:
+        return jsonify({"ok": False}), 401
+
+    if session.get("role") != "Admin":
+        return jsonify({"ok": False}), 403
+
+    latest_pending = Booking.query.filter_by(status="Pending").order_by(Booking.id.desc()).first()
+    session["admin_notifications_seen_id"] = latest_pending.id if latest_pending else 0
+
+    return jsonify({"ok": True, "count": 0})
 
 @app.route("/")
 def home():
@@ -83,7 +129,7 @@ def login():
             return redirect("/student-dashboard")
 
         flash(
-            "Invalid login details.",
+            "Invalid login details",
             "error"
         )
 
@@ -202,10 +248,42 @@ def student_dashboard():
         is_active=True
     ).all()
 
+    total_bookings = Booking.query.filter_by(
+        user_id=session["user_id"]
+    ).count()
+
+    pending_bookings = Booking.query.filter_by(
+        user_id=session["user_id"],
+        status="Pending"
+    ).count()
+
+    approved_bookings = Booking.query.filter_by(
+        user_id=session["user_id"],
+        status="Approved"
+    ).count()
+
+    recent_activity = Booking.query.filter_by(
+        user_id=session["user_id"]
+    ).order_by(Booking.id.desc()).limit(3).all()
+
+    activity_feed = []
+
+    for booking in recent_activity:
+        activity_feed.append({
+            "title": f"{booking.resource.name} booking #{booking.id}",
+            "meta": f"{booking.booking_date.strftime('%d/%m/%Y')} · {booking.start_time.strftime('%I:%M %p')} - {booking.end_time.strftime('%I:%M %p')}",
+            "status": booking.status
+        })
+
     return render_template(
         "student_dashboard.html",
         resources=resources,
-        student_name=session["user_name"]
+        student_name=session["user_name"],
+        active_resource_count=len(resources),
+        total_booking_count=total_bookings,
+        pending_booking_count=pending_bookings,
+        approved_booking_count=approved_bookings,
+        activity_feed=activity_feed
     )
 
 @app.route("/my-bookings")
@@ -237,9 +315,18 @@ def admin_dashboard():
 
     bookings = Booking.query.all()
 
+    total_bookings = len(bookings)
+    pending_bookings = Booking.query.filter_by(status="Pending").count()
+    approved_bookings = Booking.query.filter_by(status="Approved").count()
+    active_resources = Resource.query.filter_by(is_active=True).count()
+
     return render_template(
         "admin_dashboard.html",
-        bookings=bookings
+        bookings=bookings,
+        total_booking_count=total_bookings,
+        pending_booking_count=pending_bookings,
+        approved_booking_count=approved_bookings,
+        active_resource_count=active_resources
     )
 
 @app.route("/approve/<int:booking_id>",methods=["POST"])
