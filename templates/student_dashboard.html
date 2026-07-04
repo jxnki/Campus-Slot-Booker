@@ -10,11 +10,36 @@ Student Dashboard
     Welcome, {{ student_name }}
 </h2>
 
-<p class="page-subtitle">
-    Available Resources
-</p>
 
-<div class="resource-grid">
+<div class="stats-grid">
+
+    <div class="stat-card">
+        <span class="stat-value">{{ active_resource_count }}</span>
+        <span class="stat-label">Active Resources</span>
+    </div>
+
+    <div class="stat-card">
+        <span class="stat-value">{{ total_booking_count }}</span>
+        <span class="stat-label">Your Bookings</span>
+    </div>
+
+    <div class="stat-card">
+        <span class="stat-value">{{ pending_booking_count }}</span>
+        <span class="stat-label">Pending</span>
+    </div>
+
+    <div class="stat-card">
+        <span class="stat-value">{{ approved_booking_count }}</span>
+        <span class="stat-label">Approved</span>
+    </div>
+
+</div>
+
+<div class="dashboard-split dashboard-split-student">
+
+<div class="dashboard-main-table-wrap dashboard-main-grid-wrap">
+
+<div class="resource-grid dashboard-main-grid">
 
     {% for resource in resources %}
 
@@ -31,5 +56,45 @@ Student Dashboard
     {% endfor %}
 
 </div>
+
+</div>
+
+    <section class="dashboard-panel dashboard-sidebar">
+
+        <div class="panel-header panel-header-tight">
+            <h3>Recent Activity</h3>
+            <p>Latest updates on your bookings</p>
+        </div>
+
+        {% if activity_feed %}
+
+            <div class="activity-list activity-list-compact">
+
+                {% for item in activity_feed %}
+
+                    <div class="activity-item activity-item-compact">
+                        <div>
+                            <strong>{{ item.title }}</strong>
+                            <p>{{ item.meta }}</p>
+                        </div>
+
+                        <a class="activity-action" href="/my-bookings">Open</a>
+                    </div>
+
+                {% endfor %}
+
+            </div>
+
+        {% else %}
+
+            <div class="empty-state empty-state-compact">
+                <p>No bookings yet. Book a resource to see your activity here.</p>
+            </div>
+
+        {% endif %}
+
+    </section>
+
+    </div>
 
 {% endblock %}
