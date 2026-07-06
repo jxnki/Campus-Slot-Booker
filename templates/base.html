@@ -3,158 +3,64 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Campus Slot Booker{% endblock %}</title>
-
-    <link
-        rel="stylesheet"
-        href="{{ url_for('static', filename='css/style.css') }}"
-    >
+    <title>{% block title %}Campus Slot Booker{% endblock %} · Campus Slot Booker</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
 
-    <header>
+    <header class="site-header">
+        <div class="nav-wrap">
+            <a href="/" class="brand">
+                <span class="brand-mark">CB</span>
+                <span class="brand-text">Campus<span> Slot Booker</span></span>
+            </a>
 
-    <div class="container header-container">
+            <nav class="nav-links">
+                {% if session.get('role') == 'Admin' %}
 
-        <div class="header-left">
+                    <a href="/admin-dashboard">Dashboard</a>
+                    <a href="/manage-resources">Resources</a>
+                    <a href="/logout" class="nav-cta">Logout</a>
 
-            {% block back_button %}
-            {% endblock %}
-
-            <h1>Campus Slot Booker</h1>
-
-        </div>
-
-        <nav>
-
-            {% if "user_id" in session %}
-
-                {% if session["role"] == "Student" %}
+                {% elif session.get('role') == 'Student' %}
 
                     <a href="/student-dashboard">Dashboard</a>
                     <a href="/my-bookings">My Bookings</a>
-                    <a href="/logout">Logout</a>
+                    <a href="/logout" class="nav-cta">Logout</a>
 
-                {% elif session["role"] == "Admin" %}
-
-                    <a href="/admin-dashboard">Dashboard</a>
-                    <a href="/manage-resources">Manage Resources</a>
-                    <button
-                        type="button"
-                        class="notification-btn"
-                        data-toggle-notifications
-                        data-mark-notifications-read
-                        aria-controls="admin-notification-panel"
-                        aria-expanded="false"
-                    >
-                        <span class="notification-bell">🔔</span>
-                        {% if admin_notification_count %}
-                            <span class="notification-count" data-notification-count>{{ admin_notification_count }}</span>
-                        {% endif %}
-                    </button>
-                    <a href="/logout">Logout</a>
-
-                {% endif %}
-
-            {% else %}
-
-                <a href="/">Home</a>
-                <a href="/login">Login</a>
-                <a href="/register">Register</a>
-
-            {% endif %}
-
-        </nav>
-
-    </div>
-
-</header>
-
-    {% if session.get("role") == "Admin" and admin_recent_activity is defined %}
-        <div class="container notification-panel-wrap">
-            <section id="admin-notification-panel" class="notification-panel" aria-hidden="true">
-                <div class="panel-header panel-header-tight">
-                    <h3>Recent Activity</h3>
-                    <p>Latest updates at a glance</p>
-                </div>
-
-                {% if admin_recent_activity %}
-                    <div class="activity-list activity-list-compact notification-activity-list">
-                        {% for item in admin_recent_activity %}
-                            <div class="activity-item activity-item-compact notification-activity-item">
-                                <div>
-                                    <strong>{{ item.title }}</strong>
-                                    <p>{{ item.meta }}</p>
-                                </div>
-
-                                <span class="status {{ item.status|lower }}">{{ item.status }}</span>
-                            </div>
-                        {% endfor %}
-                    </div>
                 {% else %}
-                    <div class="empty-state empty-state-compact">
-                        <p>No booking activity yet.</p>
-                    </div>
+
+                    <a href="/login">Login</a>
+                    <a href="/register" class="nav-cta">Register</a>
+
                 {% endif %}
-            </section>
+            </nav>
         </div>
-    {% endif %}
+    </header>
 
-    <main class="container">
+    <main class="content-wrap">
+
         {% with messages = get_flashed_messages(with_categories=true) %}
-
             {% if messages %}
-
-                {% for category, message in messages %}
-
-                    <div class="flash {{ category }}">
-                        {{ message }}
-                    </div>
-
-                {% endfor %}
-
+                <div class="flash-stack" aria-live="polite" aria-atomic="true">
+                    {% for category, message in messages %}
+                        <div class="flash flash-{{ category }}">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                </div>
             {% endif %}
-
         {% endwith %}
-        {% block content %}
-        {% endblock %}
+
+        {% block back_button %}{% endblock %}
+
+        {% block content %}{% endblock %}
+
     </main>
 
-    <script>
-        (function () {
-            const toggleButton = document.querySelector("[data-toggle-notifications]");
-            const markReadUrl = "/admin-notifications/mark-read";
-            const panel = document.getElementById("admin-notification-panel");
-            const notificationCount = document.querySelector("[data-notification-count]");
-
-            if (!toggleButton || !panel) {
-                return;
-            }
-
-            toggleButton.addEventListener("click", function () {
-                const isOpen = panel.classList.toggle("is-open");
-                toggleButton.setAttribute("aria-expanded", String(isOpen));
-                panel.setAttribute("aria-hidden", String(!isOpen));
-
-                if (isOpen && notificationCount) {
-                    fetch(markReadUrl, {
-                        method: "POST",
-                        headers: {
-                            "X-Requested-With": "XMLHttpRequest"
-                        }
-                    }).then(function (response) {
-                        if (!response.ok) {
-                            return;
-                        }
-
-                        notificationCount.remove();
-                    }).catch(function () {
-                        return;
-                    });
-                }
-            });
-        }());
-    </script>
+    <footer class="site-footer">
+        Campus Slot Booker &middot; built for smarter, conflict-free room booking
+    </footer>
 
 </body>
 </html>
