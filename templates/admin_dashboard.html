@@ -34,108 +34,108 @@ Admin Dashboard
 
 </div>
 
+{% if bookings %}
+
 <table class="booking-table" id="booking-table">
 
-<tr>
+    <tr>
+        <th>Student</th>
+        <th>Booking ID</th>
+        <th>Resource</th>
+        <th>Date</th>
+        <th>Start</th>
+        <th>End</th>
+        <th>Reason</th>
+        <th>Status</th>
+        <th>Action</th>
+    </tr>
 
-    <th>Student</th>
-    <th>Booking ID</th>
-    <th>Resource</th>
-    <th>Date</th>
-    <th>Start</th>
-    <th>End</th>
-    <th>Reason</th>
-    <th>Status</th>
-    <th>Action</th>
+    {% for booking in bookings %}
 
-</tr>
+    <tr>
 
-{% for booking in bookings %}
+        <td>{{ booking.user.name }}</td>
+        <td>{{ booking.id }}</td>
+        <td>{{ booking.resource.name }}</td>
+        <td>{{ booking.booking_date.strftime("%d/%m/%Y") }}</td>
+        <td>{{ booking.start_time.strftime("%I:%M %p") }}</td>
+        <td>{{ booking.end_time.strftime("%I:%M %p") }}</td>
+        <td>{{ booking.reason }}</td>
 
-<tr>
+        <td>
 
-    <td>{{ booking.user.name }}</td>
-    <td>{{ booking.id }}</td>
-    <td>{{ booking.resource.name }}</td>
+            {% if booking.status == "Approved" %}
 
-    <td>{{ booking.booking_date.strftime("%d/%m/%Y") }}</td>
+                <span class="status approved">
+                    Approved
+                </span>
 
-    <td>{{ booking.start_time.strftime("%I:%M %p") }}</td>
+            {% elif booking.status == "Rejected" %}
 
-    <td>{{ booking.end_time.strftime("%I:%M %p") }}</td>
+                <span class="status rejected">
+                    Rejected
+                </span>
 
-    <td>{{ booking.reason }}</td>
+            {% elif booking.status == "Cancelled" %}
 
-    <td>
+                <span class="status cancelled">
+                    Cancelled
+                </span>
 
-        {% if booking.status == "Approved" %}
+            {% else %}
 
-            <span class="status approved">
-                Approved
-            </span>
+                <span class="status pending">
+                    Pending
+                </span>
 
-        {% elif booking.status == "Rejected" %}
+            {% endif %}
 
-            <span class="status rejected">
-                Rejected
-            </span>
+        </td>
 
-        {% elif booking.status == "Cancelled" %}
+        <td class="booking-action-cell">
 
-            <span class="status cancelled">
-                Cancelled
-            </span>
+            {% if booking.status == "Pending" %}
 
-        {% else %}
+                <form action="/approve/{{ booking.id }}" method="POST" style="display:inline;">
+                    <button
+                        type="submit"
+                        class="button approve-btn booking-action-btn"
+                        onclick="return confirm('Approve this booking?')"
+                    >
+                        Approve
+                    </button>
+                </form>
 
-            <span class="status pending">
-                Pending
-            </span>
+                <form action="/reject/{{ booking.id }}" method="POST" style="display:inline;">
+                    <button
+                        type="submit"
+                        class="button reject-btn booking-action-btn"
+                        onclick="return confirm('Reject this booking?')"
+                    >
+                        Reject
+                    </button>
+                </form>
 
-        {% endif %}
+            {% else %}
 
-    </td>
+                —
 
-    <td class="booking-action-cell">
+            {% endif %}
 
-        {% if booking.status == "Pending" %}
+        </td>
 
-            <form
-                action="/approve/{{ booking.id }}"
-                method="POST"
-                style="display:inline;"
-            >
-                <button
-                    type="submit"
-                    class="button approve-btn"
-                    onclick="return confirm('Approve this booking?')"
-                >
-                    Approve
-                </button>
-            </form>
+    </tr>
 
-            <form
-                action="/reject/{{ booking.id }}"
-                method="POST"
-                style="display:inline;"
-            >
-                <button
-                    type="submit"
-                    class="button reject-btn"
-                    onclick="return confirm('Reject this booking?')"
-                >
-                    Reject
-                </button>
-            </form>
-
-        {% endif %}
-
-    </td>
-
-</tr>
-
-{% endfor %}
+    {% endfor %}
 
 </table>
+
+{% else %}
+
+<div class="empty-state">
+    <p>No bookings have been made yet.</p>
+</div>
+
+{% endif %}
 
 {% endblock %}
